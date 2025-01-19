@@ -1,0 +1,31 @@
+{% comment %} {% load static %} {% endcomment %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn-Easy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    {% comment %} link rel="stylesheet" href="{% static 'css/style.css' %}" {% endcomment %}
+</head>
+<body class="bg-gray-100 text-gray-800">
+    <div class="container mx-auto mt-10">
+        <h1 class="text-4xl font-bold text-center">Welcome to Learn-Easy</h1>
+        <p class="text-center mt-4">This is the homepage of your project.</p>
+    </div>
+    {% comment %} {% comment %} <div class="container mx-auto mt-6">
+        <h2 class="text-3xl font-bold">Available Courses</h2>
+        <div class="mt-4">
+            <!-- Liste des cours -->
+            {% for course in courses %}
+                <div class="p-4 bg-white shadow-md rounded-md mb-4">
+                    <h3 class="text-xl font-semibold">{{ course.title }}</h3>
+                    <p class="mt-2">{{ course.description }}</p>
+                    <p class="mt-2 text-gray-500">By: {{ course.teacher }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div> 
+{% comment %} {% endcomment %}
+</body>
+</html> 
