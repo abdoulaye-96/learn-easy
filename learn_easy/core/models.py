@@ -20,7 +20,6 @@ class CustomUser(AbstractUser):
         return self.username
 
 
-
 class Course(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()

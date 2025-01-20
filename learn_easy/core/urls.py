@@ -13,4 +13,7 @@ urlpatterns = [
     path('api/register/', RegisterAPIView.as_view(), name='register'),  # Endpoint API registration
     path('api/courses/create/', CourseCreateAPIView.as_view(), name='create-course'),
     path('dashboard/', dashboard, name='dashboard'),
+    path('login/', views.login_user, name='login'),
+    path('logout/', views.logout_user, name='logout'),
+    path('register/', views.register_user, name='register'),
 ]
