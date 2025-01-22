@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-0@%6hcr^ehv1d(o12%el1patoqu+x(&1s@4t$@xph+@=05xhl_'
+SECRET_KEY = 'django-insecure-%8oudf^u&z0w&!rfs21-xazfvjwqvh%+l71#hfcl2g83g9zr@&'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,8 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
-    # Your apps
     'core',
 ]
 
@@ -79,7 +77,7 @@ WSGI_APPLICATION = 'learn_easy.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'lear-easy',
+        'NAME': 'learnEasy',
         'USER': 'root',
         'PASSWORD': '',
         'HOST': '127.0.0.1',
@@ -128,3 +126,9 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'core.CustomUser'
+
+LOGIN_URL = 'login'  # URL pour la connexion
+LOGIN_REDIRECT_URL = 'dashboard'  # Redirection après connexion
+LOGOUT_REDIRECT_URL = 'login'  # Redirection après déconnexion

@@ -1,0 +1,10 @@
+{% extends "core/base.html" %}
+{% block title %}Student Dashboard{% endblock %}
+{% block content %}
+<h1>Vos inscriptions</h1>
+<ul>
+    {% for enrollment in enrollments %}
+    <li>{{ enrollment.course.title }}</li>
+    {% endfor %}
+</ul>
+{% endblock %}

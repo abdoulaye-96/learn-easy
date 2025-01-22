@@ -1,0 +1,10 @@
+{% extends "core/base.html" %}
+{% block title %}Professor Dashboard{% endblock %}
+{% block content %}
+<h1>Vos cours</h1>
+<ul>
+    {% for course in courses %}
+    <li>{{ course.title }} - {{ course.description }}</li>
+    {% endfor %}
+</ul>
+{% endblock %}
