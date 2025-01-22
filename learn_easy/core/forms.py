@@ -20,4 +20,4 @@ class CustomUserCreationForm(UserCreationForm):
 class CourseForm(forms.ModelForm):
     class Meta:
         model = Course
-        fields = ['title', 'description', 'teacher', 'pdf_file', 'video_url']
+        fields = ['title', 'description', 'teacher']
