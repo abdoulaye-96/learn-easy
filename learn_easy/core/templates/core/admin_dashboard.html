@@ -7,4 +7,5 @@
     <li>{{ user.username }} - {{ user.get_user_type_display }}</li>
     {% endfor %}
 </ul>
+<a href="{% url 'course_list' %}">liste des cours</a>
 {% endblock %}

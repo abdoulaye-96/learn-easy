@@ -1,0 +1,8 @@
+<h1>Supprimer le cours</h1>
+<p>Êtes-vous sûr de vouloir supprimer "{{ course.title }}" ?</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Oui, supprimer</button>
+</form>
+<a href="{% url 'course_detail' course.pk %}">Non, retourner</a>

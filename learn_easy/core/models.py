@@ -5,6 +5,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 
+
 class CustomUser(AbstractUser):
     USER_TYPES = (
         ('admin', 'Administrateur'),
@@ -28,7 +29,6 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return f"{self.username} ({self.get_user_type_display()})"
 
-# Modèle de cours
 class Course(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
@@ -39,6 +39,8 @@ class Course(models.Model):
         related_name='teacher_courses',
         default=1
     )
+    pdf_file = models.FileField(upload_to='courses/pdfs/', blank=True, null=True, help_text="Téléchargez un fichier PDF pour le cours.")
+    video_url = models.URLField(blank=True, null=True, help_text="Ajoutez un lien vers une vidéo (par exemple, YouTube).")
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -49,7 +51,6 @@ class Course(models.Model):
             ('can_manage_courses', 'Can manage courses'),
             ('can_view_courses', 'Can view courses'),
         ]
-
 
 # Modèle de module
 class Module(models.Model):
