@@ -1,0 +1,11 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+  <h1>Discussions for {{ course.title }}</h1>
+  <ul>
+    {% for discussion in discussions %}
+      <li><a href="{% url 'discussion_detail' discussion.pk %}">{{ discussion.user.username }}</a></li>
+    {% endfor %}
+  </ul>
+  <a href="{% url 'discussion_create' course.pk %}">Create New Discussion</a>
+{% endblock %}

@@ -5,9 +5,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from .models import CustomUser, Course, Enrollment
+from .models import CustomUser, Course, Enrollment, Module, Lesson, Assignment, Submission, Discussion, Notification
 from .forms import CustomUserCreationForm
-from .forms import CourseForm
+from .forms import CourseForm, ModuleForm, LessonForm, AssignmentForm, SubmissionForm, DiscussionForm, NotificationForm
 
 # Fonction pour vérifier le type d'utilisateur
 def is_admin(user):
@@ -117,10 +117,12 @@ def course_create(request):
             course = form.save(commit=False)
             course.teacher = request.user
             course.save()
-            return redirect('course_list')
+            return redirect('module_create', course_id=course.id)  # Rediriger vers la création d'un module
     else:
         form = CourseForm()
     return render(request, 'core/course_form.html', {'form': form, 'action': 'Créer'})
+
+
 
 # Mise à jour d'un cours (réservée aux professeurs)
 @login_required
@@ -145,3 +147,321 @@ def course_delete(request, pk):
         course.delete()
         return redirect('course_list')
     return render(request, 'core/course_confirm_delete.html', {'course': course})
+
+# Liste des Modules
+@login_required
+def module_list(request, course_id):
+    course = get_object_or_404(Course, pk=course_id)
+    modules = Module.objects.filter(course=course)
+    return render(request, 'core/module_list.html', {'course': course, 'modules': modules})
+
+# Détail d'un module
+@login_required
+def module_detail(request, pk):
+    module = get_object_or_404(Module, pk=pk)
+    lessons = Lesson.objects.filter(module=module)
+    return render(request, 'core/module_detail.html', {'module': module, 'lessons': lessons})
+
+# Création d'un module
+@login_required
+@user_passes_test(is_professor)
+def module_create(request, course_id):
+    course = get_object_or_404(Course, pk=course_id)
+    if request.method == 'POST':
+        form = ModuleForm(request.POST)
+        if form.is_valid():
+            module = form.save(commit=False)
+            module.course = course
+            module.save()
+            return redirect('lesson_create', module_id=module.id)  # Rediriger vers la création d'une leçon
+    else:
+        form = ModuleForm()
+    return render(request, 'core/module_form.html', {'form': form, 'action': 'Créer'})
+
+# Mise a jour d'un modeule
+@login_required
+@user_passes_test(is_professor)
+def module_update(request, pk):
+    module = get_object_or_404(Module, pk=pk)
+    if request.method == 'POST':
+        form = ModuleForm(request.POST, instance=module)
+        if form.is_valid():
+            form.save()
+            return redirect('module_detail', pk=module.pk)
+    else:
+        form = ModuleForm(instance=module)
+    return render(request, 'core/module_form.html', {'form': form, 'action': 'Mettre à jour'})
+
+# Suppression d'un module
+@login_required
+@user_passes_test(is_professor)
+def module_delete(request, pk):
+    module = get_object_or_404(Module, pk=pk)
+    if request.method == 'POST':
+        module.delete()
+        return redirect('module_list', course_id=module.course.id)
+    return render(request, 'core/module_confirm_delete.html', {'module': module})
+
+# liste des lessons
+@login_required
+def lesson_list(request, module_id):
+    module = get_object_or_404(Module, pk=module_id)
+    lessons = Lesson.objects.filter(module=module)
+    return render(request, 'core/lesson_list.html', {'module': module, 'lessons': lessons})
+
+# Details d'une leçon
+@login_required
+def lesson_detail(request, pk):
+    lesson = get_object_or_404(Lesson, pk=pk)
+    return render(request, 'core/lesson_detail.html', {'lesson': lesson})
+
+# Création d'une leçon
+@login_required
+@user_passes_test(is_professor)
+def lesson_create(request, module_id):
+    module = get_object_or_404(Module, pk=module_id)
+    if request.method == 'POST':
+        form = LessonForm(request.POST, request.FILES)
+        if form.is_valid():
+            lesson = form.save(commit=False)
+            lesson.module = module
+            lesson.save()
+            return redirect('module_detail', pk=module.id)  # Rediriger vers la page de détail du module
+    else:
+        form = LessonForm()
+    return render(request, 'core/lesson_form.html', {'form': form, 'action': 'Créer'})
+
+# Mise à jour d'une leçon
+@login_required
+@user_passes_test(is_professor)
+def lesson_update(request, pk):
+    lesson = get_object_or_404(Lesson, pk=pk)
+    if request.method == 'POST':
+        form = LessonForm(request.POST, request.FILES, instance=lesson)
+        if form.is_valid():
+            form.save()
+            return redirect('lesson_detail', pk=lesson.pk)
+    else:
+        form = LessonForm(instance=lesson)
+    return render(request, 'core/lesson_form.html', {'form': form, 'action': 'Mettre à jour'})
+
+# Suppression d'une leçon
+@login_required
+@user_passes_test(is_professor)
+def lesson_delete(request, pk):
+    lesson = get_object_or_404(Lesson, pk=pk)
+    if request.method == 'POST':
+        lesson.delete()
+        return redirect('lesson_list', module_id=lesson.module.id)
+    return render(request, 'core/lesson_confirm_delete.html', {'lesson': lesson})
+
+# Listes des Devoirs
+@login_required
+def assignment_list(request, module_id):
+    module = get_object_or_404(Module, pk=module_id)
+    assignments = Assignment.objects.filter(module=module)
+    return render(request, 'core/assignment_list.html', {'module': module, 'assignments': assignments})
+
+# Détails d'un devoir
+@login_required
+def assignment_detail(request, pk):
+    assignment = get_object_or_404(Assignment, pk=pk)
+    return render(request, 'core/assignment_detail.html', {'assignment': assignment})
+
+# Création d'un Devoir
+@login_required
+@user_passes_test(is_professor)
+def assignment_create(request, module_id):
+    module = get_object_or_404(Module, pk=module_id)
+    if request.method == 'POST':
+        form = AssignmentForm(request.POST)
+        if form.is_valid():
+            assignment = form.save(commit=False)
+            assignment.module = module
+            assignment.save()
+            return redirect('course_detail', pk=module.course.id)  # Rediriger vers la page de détail du cours
+    else:
+        form = AssignmentForm()
+    return render(request, 'core/assignment_form.html', {'form': form, 'action': 'Créer'})
+
+# Mise à jour d'un Devoir
+@login_required
+@user_passes_test(is_professor)
+def assignment_update(request, pk):
+    assignment = get_object_or_404(Assignment, pk=pk)
+    if request.method == 'POST':
+        form = AssignmentForm(request.POST, instance=assignment)
+        if form.is_valid():
+            form.save()
+            return redirect('assignment_detail', pk=assignment.pk)
+    else:
+        form = AssignmentForm(instance=assignment)
+    return render(request, 'core/assignment_form.html', {'form': form, 'action': 'Mettre à jour'})
+
+# Suppression d'un Devoir
+@login_required
+@user_passes_test(is_professor)
+def assignment_delete(request, pk):
+    assignment = get_object_or_404(Assignment, pk=pk)
+    if request.method == 'POST':
+        assignment.delete()
+        return redirect('assignment_list', module_id=assignment.module.id)
+    return render(request, 'core/assignment_confirm_delete.html', {'assignment': assignment})
+
+# Listes des soumissions
+@login_required
+def submission_list(request, assignment_id):
+    assignment = get_object_or_404(Assignment, pk=assignment_id)
+    submissions = Submission.objects.filter(assignment=assignment)
+    return render(request, 'core/submission_list.html', {'assignment': assignment, 'submissions': submissions})
+
+# Details d'une soumission
+@login_required
+def submission_detail(request, pk):
+    submission = get_object_or_404(Submission, pk=pk)
+    return render(request, 'core/submission_detail.html', {'submission': submission})
+
+# Création d'une soumission
+@login_required
+@user_passes_test(is_student)
+def submission_create(request, assignment_id):
+    assignment = get_object_or_404(Assignment, pk=assignment_id)
+    if request.method == 'POST':
+        form = SubmissionForm(request.POST, request.FILES)
+        if form.is_valid():
+            submission = form.save(commit=False)
+            submission.student = request.user
+            submission.assignment = assignment
+            submission.save()
+            return redirect('submission_list', assignment_id=assignment.id)
+    else:
+        form = SubmissionForm()
+    return render(request, 'core/submission_form.html', {'form': form, 'action': 'Créer'})
+
+# Mise a jour d'une soumission
+@login_required
+@user_passes_test(is_student)
+def submission_update(request, pk):
+    submission = get_object_or_404(Submission, pk=pk, student=request.user)
+    if request.method == 'POST':
+        form = SubmissionForm(request.POST, request.FILES, instance=submission)
+        if form.is_valid():
+            form.save()
+            return redirect('submission_detail', pk=submission.pk)
+    else:
+        form = SubmissionForm(instance=submission)
+    return render(request, 'core/submission_form.html', {'form': form, 'action': 'Mettre à jour'})
+
+# Suppression d'une soumission
+@login_required
+@user_passes_test(is_student)
+def submission_delete(request, pk):
+    submission = get_object_or_404(Submission, pk=pk, student=request.user)
+    if request.method == 'POST':
+        submission.delete()
+        return redirect('submission_list', assignment_id=submission.assignment.id)
+    return render(request, 'core/submission_confirm_delete.html', {'submission': submission})
+
+# Liste des discussions
+@login_required
+def discussion_list(request, course_id):
+    course = get_object_or_404(Course, pk=course_id)
+    discussions = Discussion.objects.filter(course=course)
+    return render(request, 'core/discussion_list.html', {'course': course, 'discussions': discussions})
+
+# Detail d'une discussion
+@login_required
+def discussion_detail(request, pk):
+    discussion = get_object_or_404(Discussion, pk=pk)
+    return render(request, 'core/discussion_detail.html', {'discussion': discussion})
+
+# Création d'une discussion
+@login_required
+def discussion_create(request, course_id):
+    course = get_object_or_404(Course, pk=course_id)
+    if request.method == 'POST':
+        form = DiscussionForm(request.POST)
+        if form.is_valid():
+            discussion = form.save(commit=False)
+            discussion.course = course
+            discussion.user = request.user
+            discussion.save()
+            return redirect('discussion_list', course_id=course.id)
+    else:
+        form = DiscussionForm()
+    return render(request, 'core/discussion_form.html', {'form': form, 'action': 'Créer'})
+
+# Mise à jour d'une discussion
+@login_required
+def discussion_update(request, pk):
+    discussion = get_object_or_404(Discussion, pk=pk, user=request.user)
+    if request.method == 'POST':
+        form = DiscussionForm(request.POST, instance=discussion)
+        if form.is_valid():
+            form.save()
+            return redirect('discussion_detail', pk=discussion.pk)
+    else:
+        form = DiscussionForm(instance=discussion)
+    return render(request, 'core/discussion_form.html', {'form': form, 'action': 'Mettre à jour'})
+
+# Suppression d'une discussion
+@login_required
+def discussion_delete(request, pk):
+    discussion = get_object_or_404(Discussion, pk=pk, user=request.user)
+    if request.method == 'POST':
+        discussion.delete()
+        return redirect('discussion_list', course_id=discussion.course.id)
+    return render(request, 'core/discussion_confirm_delete.html', {'discussion': discussion})
+
+# Liste des Notifications
+@login_required
+def notification_list(request):
+    notifications = Notification.objects.filter(user=request.user)
+    return render(request, 'core/notification_list.html', {'notifications': notifications})
+
+# Détails d'une notification
+@login_required
+def notification_detail(request, pk):
+    notification = get_object_or_404(Notification, pk=pk, user=request.user)
+    notification.is_read = True
+    notification.save()
+    return render(request, 'core/notification_detail.html', {'notification': notification})
+
+# Création d'une notification
+@login_required
+@user_passes_test(is_admin)
+def notification_create(request):
+    if request.method == 'POST':
+        form = NotificationForm(request.POST)
+        if form.is_valid():
+            notification = form.save(commit=False)
+            notification.user = request.user
+            notification.save()
+            return redirect('notification_list')
+    else:
+        form = NotificationForm()
+    return render(request, 'core/notification_form.html', {'form': form, 'action': 'Créer'})
+
+# Mise a jour d'une notification
+@login_required
+@user_passes_test(is_admin)
+def notification_update(request, pk):
+    notification = get_object_or_404(Notification, pk=pk)
+    if request.method == 'POST':
+        form = NotificationForm(request.POST, instance=notification)
+        if form.is_valid():
+            form.save()
+            return redirect('notification_detail', pk=notification.pk)
+    else:
+        form = NotificationForm(instance=notification)
+    return render(request, 'core/notification_form.html', {'form': form, 'action': 'Mettre à jour'})
+
+# Suppression d'une notification
+@login_required
+@user_passes_test(is_admin)
+def notification_delete(request, pk):
+    notification = get_object_or_404(Notification, pk=pk)
+    if request.method == 'POST':
+        notification.delete()
+        return redirect('notification_list')
+    return render(request, 'core/notification_confirm_delete.html', {'notification': notification})

@@ -1,0 +1,14 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+  <h1>{{ module.title }}</h1>
+  <p>{{ module.description }}</p>
+
+  <h2>Leçons</h2>
+  <ul>
+    {% for lesson in lessons %}
+      <li><a href="{% url 'lesson_detail' lesson.pk %}">{{ lesson.title }}</a></li>
+    {% endfor %}
+  </ul>
+  <a href="{% url 'lesson_create' module.pk %}">Ajouter une nouvelle leçon</a>
+{% endblock %}

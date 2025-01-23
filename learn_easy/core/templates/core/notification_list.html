@@ -1,0 +1,13 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+  <h1>Notifications</h1>
+  <ul>
+    {% for notification in notifications %}
+      <li><a href="{% url 'notification_detail' notification.pk %}">{{ notification.message }}</a></li>
+    {% endfor %}
+  </ul>
+  {% if user.user_type == 'admin' %}
+    <a href="{% url 'notification_create' %}">Create New Notification</a>
+  {% endif %}
+{% endblock %}

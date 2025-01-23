@@ -1,0 +1,11 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+  <h1>Notification</h1>
+  <p>{{ notification.message }}</p>
+  <p>Created At: {{ notification.created_at }}</p>
+  {% if user.user_type == 'admin' %}
+    <a href="{% url 'notification_update' notification.pk %}">Update Notification</a>
+    <a href="{% url 'notification_delete' notification.pk %}">Delete Notification</a>
+  {% endif %}
+{% endblock %}

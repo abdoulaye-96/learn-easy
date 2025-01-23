@@ -1,11 +1,29 @@
+
 {% extends "core/base.html" %}
 {% block title %}Student Dashboard{% endblock %}
 {% block content %}
 <h1>Vos inscriptions</h1>
 <ul>
     {% for enrollment in enrollments %}
-    <li>{{ enrollment.course.title }}</li>
+    <li>
+        <strong>{{ enrollment.course.title }}</strong>
+        <br>
+        <a href="{% url 'course_detail' enrollment.course.pk %}">Voir les détails du cours</a>
+        <br>
+        <a href="{% url 'module_list' enrollment.course.pk %}">Voir les modules</a>
+        <br>
+        <a href="{% url 'discussion_list' enrollment.course.pk %}">Voir les discussions</a>
+        <br>
+        {% for module in enrollment.course.modules.all %}
+            <a href="{% url 'assignment_list' module.pk %}">Voir les devoirs pour {{ module.title }}</a>
+            <br>
+            <a href="{% url 'submission_list' module.pk %}">Voir les soumissions pour {{ module.title }}</a>
+            <br>
+        {% endfor %}
+    </li>
     {% endfor %}
 </ul>
-<a href="{% url 'course_list' %}">liste des cours</a>
+<a href="{% url 'course_list' %}">Liste des cours</a>
+<br>
+<a href="{% url 'notification_list' %}">Voir les notifications</a>
 {% endblock %}

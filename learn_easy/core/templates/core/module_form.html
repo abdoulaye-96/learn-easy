@@ -1,8 +1,8 @@
 {% extends "core/base.html" %}
 
 {% block content %}
-  <h1>{{ action }} Cours</h1>
-  <form method="post" enctype="multipart/form-data">
+  <h1>{{ action }} Module</h1>
+  <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">{{ action }}</button>

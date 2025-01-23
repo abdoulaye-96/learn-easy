@@ -1,0 +1,15 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+  <h1>Submission by {{ submission.student.username }}</h1>
+  <p>Assignment: {{ submission.assignment.title }}</p>
+  <p>Submitted At: {{ submission.submitted_at }}</p>
+  <p>File: <a href="{{ submission.file.url }}">{{ submission.file.name }}</a></p>
+  {% if submission.grade is not None %}
+    <p>Grade: {{ submission.grade }}</p>
+  {% endif %}
+  {% if user.user_type == 'student' and user == submission.student %}
+    <a href="{% url 'submission_update' submission.pk %}">Update Submission</a>
+    <a href="{% url 'submission_delete' submission.pk %}">Delete Submission</a>
+  {% endif %}
+{% endblock %}

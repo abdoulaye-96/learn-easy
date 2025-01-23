@@ -19,4 +19,46 @@ urlpatterns = [
     path('courses/create/', views.course_create, name='course_create'),
     path('courses/<int:pk>/update/', views.course_update, name='course_update'),
     path('courses/<int:pk>/delete/', views.course_delete, name='course_delete'),
+
+    # Modules
+    path('courses/<int:course_id>/modules/', views.module_list, name='module_list'),
+    path('modules/<int:pk>/', views.module_detail, name='module_detail'),
+    path('courses/<int:course_id>/modules/create/', views.module_create, name='module_create'),
+    path('modules/<int:pk>/update/', views.module_update, name='module_update'),
+    path('modules/<int:pk>/delete/', views.module_delete, name='module_delete'),
+
+    # Lessons
+    path('modules/<int:module_id>/lessons/', views.lesson_list, name='lesson_list'),
+    path('lessons/<int:pk>/', views.lesson_detail, name='lesson_detail'),
+    path('modules/<int:module_id>/lessons/create/', views.lesson_create, name='lesson_create'),
+    path('lessons/<int:pk>/update/', views.lesson_update, name='lesson_update'),
+    path('lessons/<int:pk>/delete/', views.lesson_delete, name='lesson_delete'),
+
+    # Assignments
+    path('modules/<int:module_id>/assignments/', views.assignment_list, name='assignment_list'),
+    path('assignments/<int:pk>/', views.assignment_detail, name='assignment_detail'),
+    path('modules/<int:module_id>/assignments/create/', views.assignment_create, name='assignment_create'),
+    path('assignments/<int:pk>/update/', views.assignment_update, name='assignment_update'),
+    path('assignments/<int:pk>/delete/', views.assignment_delete, name='assignment_delete'),
+
+    # Submissions
+    path('assignments/<int:assignment_id>/submissions/', views.submission_list, name='submission_list'),
+    path('submissions/<int:pk>/', views.submission_detail, name='submission_detail'),
+    path('assignments/<int:assignment_id>/submissions/create/', views.submission_create, name='submission_create'),
+    path('submissions/<int:pk>/update/', views.submission_update, name='submission_update'),
+    path('submissions/<int:pk>/delete/', views.submission_delete, name='submission_delete'),
+
+    # Discussions
+    path('courses/<int:course_id>/discussions/', views.discussion_list, name='discussion_list'),
+    path('discussions/<int:pk>/', views.discussion_detail, name='discussion_detail'),
+    path('courses/<int:course_id>/discussions/create/', views.discussion_create, name='discussion_create'),
+    path('discussions/<int:pk>/update/', views.discussion_update, name='discussion_update'),
+    path('discussions/<int:pk>/delete/', views.discussion_delete, name='discussion_delete'),
+
+    # Notifications
+    path('notifications/', views.notification_list, name='notification_list'),
+    path('notifications/<int:pk>/', views.notification_detail, name='notification_detail'),
+    path('notifications/create/', views.notification_create, name='notification_create'),
+    path('notifications/<int:pk>/update/', views.notification_update, name='notification_update'),
+    path('notifications/<int:pk>/delete/', views.notification_delete, name='notification_delete'),
 ]

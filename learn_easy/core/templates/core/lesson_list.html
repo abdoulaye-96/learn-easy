@@ -1,0 +1,13 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+  <h1>Lessons for {{ module.title }}</h1>
+  <ul>
+    {% for lesson in lessons %}
+      <li><a href="{% url 'lesson_detail' lesson.pk %}">{{ lesson.title }}</a></li>
+    {% endfor %}
+  </ul>
+  {% if user.user_type == 'professor' %}
+    <a href="{% url 'lesson_create' module.pk %}">Create New Lesson</a>
+  {% endif %}
+{% endblock %}

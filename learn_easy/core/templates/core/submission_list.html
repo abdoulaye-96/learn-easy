@@ -1,0 +1,13 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+  <h1>Submissions for {{ assignment.title }}</h1>
+  <ul>
+    {% for submission in submissions %}
+      <li><a href="{% url 'submission_detail' submission.pk %}">{{ submission.student.username }}</a></li>
+    {% endfor %}
+  </ul>
+  {% if user.user_type == 'student' %}
+    <a href="{% url 'submission_create' assignment.pk %}">Create New Submission</a>
+  {% endif %}
+{% endblock %}

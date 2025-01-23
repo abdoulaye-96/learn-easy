@@ -1,0 +1,12 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+  <h1>Discussion by {{ discussion.user.username }}</h1>
+  <p>{{ discussion.content }}</p>
+  <p>Created At: {{ discussion.created_at }}</p>
+  {% if user == discussion.user %}
+    <a href="{% url 'discussion_update' discussion.pk %}">Update Discussion</a>
+    <a href="{% url 'discussion_delete' discussion.pk %}">Delete Discussion</a>
+  {% endif %}
+{% endblock %}
+
