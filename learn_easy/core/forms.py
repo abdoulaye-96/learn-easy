@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser
-from .models import Course
+from .models import Course, Module
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -21,3 +21,10 @@ class CourseForm(forms.ModelForm):
     class Meta:
         model = Course
         fields = ['title', 'description', 'teacher']
+
+    
+class ModuleForm(forms.ModelForm):
+    class Meta:
+        model = Module
+        fields = ['title', 'description', 'course']
+

@@ -1,0 +1,8 @@
+<h1>Supprimer le module</h1>
+<p>Êtes-vous sûr de vouloir supprimer "{{ module.title }}" ?</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Oui, supprimer</button>
+</form>
+<a href="{% url 'module_detail' module.pk %}">Non, retourner</a>

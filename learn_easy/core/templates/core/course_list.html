@@ -3,7 +3,7 @@
 {% block content %}
 
 <h1>Liste des cours</h1>
-{% if user.role == 'teacher' %}
+{% if user.user_type == 'professor' %}
     <a href="{% url 'course_create' %}">Créer un nouveau cours</a>
 {% endif %}
 
