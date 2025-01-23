@@ -1,4 +1,5 @@
 
+<<<<<<< HEAD
 {% extends "core/base.html" %}
 
 {% block content %}
@@ -44,3 +45,39 @@
     {% endfor %}
   </ul>
 {% endblock %}
+=======
+{% if user.role == 'teacher' and course.teacher == user %}
+    <a href="{% url 'course_update' course.pk %}">Modifier</a>
+    <form action="{% url 'course_delete' course.pk %}" method="post" style="display: inline;">
+        {% csrf_token %}
+        <button type="submit">Supprimer</button>
+    </form>
+{% endif %}
+
+<a href="{% url 'course_list' %}">Retour à la liste des cours</a>
+
+
+
+
+
+
+{% comment %} <h1>{{ course.title }}</h1>
+<p>{{ course.description }}</p>
+<p>Créé par : {{ course.teacher.username }}</p>
+
+{% if course.pdf_file %}
+    <p><a href="{{ course.pdf_file.url }}" download>Télécharger le PDF</a></p>
+{% endif %}
+{% if course.video_url %}
+    <p><a href="{{ course.video_url }}" target="_blank">Voir la vidéo</a></p>
+{% endif %}
+
+{% if user.user_type == 'professor' and course.teacher == user %}
+    <a href="{% url 'course_update' course.pk %}">Modifier</a>
+    <form action="{% url 'course_delete' course.pk %}" method="post" style="display: inline;">
+        {% csrf_token %}
+        <button type="submit">Supprimer</button>
+    </form>
+{% endif %}
+<a href="{% url 'course_list' %}">Retour à la liste des cours</a> {% endcomment %}
+>>>>>>> a65b0c6c78d476ba55391cfa84f19d7545b91a11

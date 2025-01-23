@@ -5,9 +5,15 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+<<<<<<< HEAD
 from .models import CustomUser, Course, Enrollment, Module, Lesson, Assignment, Submission, Discussion, Notification
 from .forms import CustomUserCreationForm
 from .forms import CourseForm, ModuleForm, LessonForm, AssignmentForm, SubmissionForm, DiscussionForm, NotificationForm
+=======
+from .models import CustomUser, Course, Enrollment, Module
+from .forms import CustomUserCreationForm, ModuleForm
+from .forms import CourseForm
+>>>>>>> a65b0c6c78d476ba55391cfa84f19d7545b91a11
 
 # Fonction pour vérifier le type d'utilisateur
 def is_admin(user):
@@ -93,15 +99,14 @@ def register_view(request):
     return render(request, 'core/register.html', {'form': form})
 
 
-
-
-# Liste des cours (visible par tout le monde connecté)
+# Liste des cours (accessible par tous les utilisateurs connectés)
 @login_required
 def course_list(request):
     courses = Course.objects.all()
     return render(request, 'core/course_list.html', {'courses': courses})
 
-# Détails d'un cours (visible par tout le monde connecté)
+# Détail d'un cours
+# Détails d'un cours (accessible par tous les utilisateurs connectés)
 @login_required
 def course_detail(request, pk):
     course = get_object_or_404(Course, pk=pk)
@@ -112,25 +117,29 @@ def course_detail(request, pk):
 @user_passes_test(is_professor)
 def course_create(request):
     if request.method == 'POST':
-        form = CourseForm(request.POST, request.FILES)
+        form = CourseForm(request.POST)
         if form.is_valid():
             course = form.save(commit=False)
-            course.teacher = request.user
+            course.teacher = request.user  # Associe le cours au professeur connecté
             course.save()
             return redirect('module_create', course_id=course.id)  # Rediriger vers la création d'un module
     else:
         form = CourseForm()
     return render(request, 'core/course_form.html', {'form': form, 'action': 'Créer'})
 
+<<<<<<< HEAD
 
 
 # Mise à jour d'un cours (réservée aux professeurs)
+=======
+# Mise à jour d'un cours (réservée aux professeurs, uniquement pour leurs propres cours)
+>>>>>>> a65b0c6c78d476ba55391cfa84f19d7545b91a11
 @login_required
 @user_passes_test(is_professor)
 def course_update(request, pk):
     course = get_object_or_404(Course, pk=pk, teacher=request.user)
     if request.method == 'POST':
-        form = CourseForm(request.POST, request.FILES, instance=course)
+        form = CourseForm(request.POST, instance=course)
         if form.is_valid():
             form.save()
             return redirect('course_detail', pk=course.pk)
@@ -138,7 +147,7 @@ def course_update(request, pk):
         form = CourseForm(instance=course)
     return render(request, 'core/course_form.html', {'form': form, 'action': 'Mettre à jour'})
 
-# Suppression d'un cours (réservée aux professeurs)
+# Suppression d'un cours (réservée aux professeurs, uniquement pour leurs propres cours)
 @login_required
 @user_passes_test(is_professor)
 def course_delete(request, pk):
@@ -148,6 +157,7 @@ def course_delete(request, pk):
         return redirect('course_list')
     return render(request, 'core/course_confirm_delete.html', {'course': course})
 
+<<<<<<< HEAD
 # Liste des Modules
 @login_required
 def module_list(request, course_id):
@@ -167,31 +177,70 @@ def module_detail(request, pk):
 @user_passes_test(is_professor)
 def module_create(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
+=======
+
+# Liste des cours (accessible par tous les utilisateurs connectés)
+@login_required
+def module_list(request):
+    modules = Module.objects.all()
+    return render(request, 'core/module_list.html', {'modules': modules})
+
+# Détail d'un cours
+# Détails d'un cours (accessible par tous les utilisateurs connectés)
+@login_required
+def module_detail(request, pk):
+    module = get_object_or_404(Module, pk=pk)
+    return render(request, 'core/module_detail.html', {'module': module})
+
+# Création d'un cours (réservée aux professeurs)
+@login_required
+@user_passes_test(is_professor)
+def module_create(request):
+>>>>>>> a65b0c6c78d476ba55391cfa84f19d7545b91a11
     if request.method == 'POST':
         form = ModuleForm(request.POST)
         if form.is_valid():
             module = form.save(commit=False)
+<<<<<<< HEAD
             module.course = course
             module.save()
             return redirect('lesson_create', module_id=module.id)  # Rediriger vers la création d'une leçon
+=======
+            module.teacher = request.user  # Associe le cours au professeur connecté
+            module.save()
+            return redirect('module_list')
+>>>>>>> a65b0c6c78d476ba55391cfa84f19d7545b91a11
     else:
         form = ModuleForm()
     return render(request, 'core/module_form.html', {'form': form, 'action': 'Créer'})
 
+<<<<<<< HEAD
 # Mise a jour d'un modeule
 @login_required
 @user_passes_test(is_professor)
 def module_update(request, pk):
     module = get_object_or_404(Module, pk=pk)
+=======
+# Mise à jour d'un cours (réservée aux professeurs, uniquement pour leurs propres cours)
+@login_required
+@user_passes_test(is_professor)
+def module_update(request, pk):
+    module = get_object_or_404(Course, pk=pk, teacher=request.user)
+>>>>>>> a65b0c6c78d476ba55391cfa84f19d7545b91a11
     if request.method == 'POST':
         form = ModuleForm(request.POST, instance=module)
         if form.is_valid():
             form.save()
+<<<<<<< HEAD
             return redirect('module_detail', pk=module.pk)
+=======
+            return redirect('course_detail', pk=module.pk)
+>>>>>>> a65b0c6c78d476ba55391cfa84f19d7545b91a11
     else:
         form = ModuleForm(instance=module)
     return render(request, 'core/module_form.html', {'form': form, 'action': 'Mettre à jour'})
 
+<<<<<<< HEAD
 # Suppression d'un module
 @login_required
 @user_passes_test(is_professor)
@@ -465,3 +514,67 @@ def notification_delete(request, pk):
         notification.delete()
         return redirect('notification_list')
     return render(request, 'core/notification_confirm_delete.html', {'notification': notification})
+=======
+# Suppression d'un cours (réservée aux professeurs, uniquement pour leurs propres cours)
+@login_required
+@user_passes_test(is_professor)
+def module_delete(request, pk):
+    module = get_object_or_404(Module, pk=pk, teacher=request.user)
+    if request.method == 'POST':
+        module.delete()
+        return redirect('module_list')
+    return render(request, 'core/module_confirm_delete.html', {'module': module})
+
+
+
+# Liste des cours (visible par tout le monde connecté)
+# @login_required
+# def course_list(request):
+#     courses = Course.objects.all()
+#     return render(request, 'core/course_list.html', {'courses': courses})
+
+# # Détails d'un cours (visible par tout le monde connecté)
+# @login_required
+# def course_detail(request, pk):
+#     course = get_object_or_404(Course, pk=pk)
+#     return render(request, 'core/course_detail.html', {'course': course})
+
+# # Création d'un cours (réservée aux professeurs)
+# @login_required
+# @user_passes_test(is_professor)
+# def course_create(request):
+#     if request.method == 'POST':
+#         form = CourseForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             course = form.save(commit=False)
+#             course.teacher = request.user
+#             course.save()
+#             return redirect('course_list')
+#     else:
+#         form = CourseForm()
+#     return render(request, 'core/course_form.html', {'form': form, 'action': 'Créer'})
+
+# # Mise à jour d'un cours (réservée aux professeurs)
+# @login_required
+# @user_passes_test(is_professor)
+# def course_update(request, pk):
+#     course = get_object_or_404(Course, pk=pk, teacher=request.user)
+#     if request.method == 'POST':
+#         form = CourseForm(request.POST, request.FILES, instance=course)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('course_detail', pk=course.pk)
+#     else:
+#         form = CourseForm(instance=course)
+#     return render(request, 'core/course_form.html', {'form': form, 'action': 'Mettre à jour'})
+
+# # Suppression d'un cours (réservée aux professeurs)
+# @login_required
+# @user_passes_test(is_professor)
+# def course_delete(request, pk):
+#     course = get_object_or_404(Course, pk=pk, teacher=request.user)
+#     if request.method == 'POST':
+#         course.delete()
+#         return redirect('course_list')
+#     return render(request, 'core/course_confirm_delete.html', {'course': course})
+>>>>>>> a65b0c6c78d476ba55391cfa84f19d7545b91a11

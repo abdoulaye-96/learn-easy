@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "core/base.html" %}
 
 {% block content %}
@@ -8,3 +9,24 @@
     <button type="submit">{{ action }}</button>
   </form>
 {% endblock %}
+=======
+<h1>{{ action }} un cours</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">{{ action }}</button>
+</form>
+<a href="{% url 'course_list' %}">Annuler</a>
+
+
+
+
+
+{% comment %} <h1>{{ action }} un cours</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">{{ action }}</button>
+</form>
+<a href="{% url 'course_list' %}">Annuler</a> {% endcomment %}
+>>>>>>> a65b0c6c78d476ba55391cfa84f19d7545b91a11

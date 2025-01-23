@@ -29,22 +29,38 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return f"{self.username} ({self.get_user_type_display()})"
 
+
 class Course(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     teacher = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        'core.CustomUser',
         on_delete=models.CASCADE,
-        limit_choices_to={'user_type': 'professor'},
-        related_name='teacher_courses',
-        default=1
+        limit_choices_to={'role': 'teacher'},
+        related_name='teacher_courses'
     )
-    pdf_file = models.FileField(upload_to='courses/pdfs/', blank=True, null=True, help_text="Téléchargez un fichier PDF pour le cours.")
-    video_url = models.URLField(blank=True, null=True, help_text="Ajoutez un lien vers une vidéo (par exemple, YouTube).")
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title
+
+
+# class Course(models.Model):
+#     title = models.CharField(max_length=255)
+#     description = models.TextField()
+#     teacher = models.ForeignKey(
+#         settings.AUTH_USER_MODEL,
+#         on_delete=models.CASCADE,
+#         limit_choices_to={'user_type': 'professor'},
+#         related_name='teacher_courses',
+#         default=1
+#     )
+#     pdf_file = models.FileField(upload_to='courses/pdfs/', blank=True, null=True, help_text="Téléchargez un fichier PDF pour le cours.")
+#     video_url = models.URLField(blank=True, null=True, help_text="Ajoutez un lien vers une vidéo (par exemple, YouTube).")
+#     created_at = models.DateTimeField(auto_now_add=True)
+
+#     def __str__(self):
+#         return self.title
 
     class Meta:
         permissions = [

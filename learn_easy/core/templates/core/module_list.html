@@ -1,6 +1,7 @@
 {% extends "core/base.html" %}
 
 {% block content %}
+<<<<<<< HEAD
   <h1>Modules for {{ course.title }}</h1>
   <ul>
     {% for module in modules %}
@@ -11,3 +12,20 @@
     <a href="{% url 'module_create' course.pk %}">Create New Module</a>
   {% endif %}
 {% endblock %}
+=======
+
+<h1>Liste des modules</h1>
+{% if user.user_type == 'professor' %}
+    <a href="{% url 'module_create' %}">Créer un nouveau module</a>
+{% endif %}
+
+<ul>
+    {% for module in modules %}
+        <li>
+            <a href="{% url 'module_detail' module.pk %}">{{ module.title }}</a>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}
+
+>>>>>>> a65b0c6c78d476ba55391cfa84f19d7545b91a11
