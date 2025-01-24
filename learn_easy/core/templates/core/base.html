@@ -1,24 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Core App{% endblock %}</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Learn-Easy{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <nav>
-        <a href="{% url 'dashboard' %}">Dashboard</a>
+<body class="font-sans">
+  <!-- Navbar -->
+  <header class="bg-white shadow-md">
+    <div class="container mx-auto flex justify-between items-center py-4 px-6">
+      <!-- Logo -->
+      <div class="flex items-center space-x-2">
+        <div class="w-8 h-8 bg-blue-500 flex justify-center items-center rounded-md">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 20l9-5-9-5-9 5 9 5z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 12l9-5-9-5-9 5 9 5z" />
+          </svg>
+        </div>
+        <span class="text-xl font-bold text-gray-800">Learn-Easy</span>
+      </div>
+      <!-- Menu -->
+      <nav class="space-x-6 text-gray-700">
+        <!-- <a href="{% url 'dashboard' %}" class="hover:text-blue-500">Accueil</a> -->
         {% if user.is_authenticated %}
-            <a href="{% url 'logout' %}">Logout</a>
+          <a href="{% url 'logout' %}" class="hover:text-blue-500">Se déconnecter</a>
         {% else %}
-            <a href="{% url 'login' %}">Login</a>
-            <a href="{% url 'register' %}">Register</a>
+          <a href="{% url 'login' %}" class="hover:text-blue-500">Se connecter</a>
+          <a href="{% url 'register' %}" class="hover:text-blue-500">S'inscrire</a>
         {% endif %}
-    </nav>
-    <main>
-        {% block content %}
-        
-        {% endblock %}
-    </main>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="relative bg-cover bg-center" style="background-image: url('https://atlasexpertgroupe.com/wp-content/uploads/2023/09/service-3-scaled.jpg');">
+    <div class="bg-black bg-opacity-70 py-60">
+      <div class="container mx-auto text-center text-white">
+        <h1 class="text-4xl md:text-5xl font-bold leading-snug mb-4">
+          Bienvenue sur Learn-Easy<br>
+          Gérez vos activités facilement et efficacement.
+        </h1>
+        <p class="text-lg md:text-xl mb-6">
+          Une solution moderne pour simplifier votre quotidien. Découvrez<br>
+          nos fonctionnalités avancées et notre interface intuitive.
+        </p>
+        <a href="{% url 'login' %}" class="bg-blue-600 text-white px-8 py-3 rounded-full text-lg shadow-md hover:bg-blue-500 transition">
+          Commencez Maintenant ➡
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main class="container mx-auto mt-10">
+    {% block content %}
+    {% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-100 text-center py-4 mt-10">
+    <p class="text-sm text-gray-600">&copy; 2025 Core App. Tous droits réservés.</p>
+  </footer>
 </body>
 </html>
