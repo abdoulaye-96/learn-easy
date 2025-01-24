@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 {% extends "core/base.html" %}
 
 {% block content %}
@@ -13,20 +12,3 @@
   </ul>
   <a href="{% url 'lesson_create' module.pk %}">Ajouter une nouvelle leçon</a>
 {% endblock %}
-=======
-<h1>{{ module.title }}</h1>
-<p>{{ module.description }}</p>
-<p>Créé par : {{ module.teacher.username }}</p>
-
-{% if user.role == 'teacher' and module.teacher == user %}
-    <a href="{% url 'module_update' module.pk %}">Modifier</a>
-    <form action="{% url 'module_delete' module.pk %}" method="post" style="display: inline;">
-        {% csrf_token %}
-        <button type="submit">Supprimer</button>
-    </form>
-{% endif %}
-
-<a href="{% url 'module_list' %}">Retour à la liste des modules</a>
-
-
->>>>>>> a65b0c6c78d476ba55391cfa84f19d7545b91a11
