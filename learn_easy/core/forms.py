@@ -20,7 +20,7 @@ class CustomUserCreationForm(UserCreationForm):
 class CourseForm(forms.ModelForm):
     class Meta:
         model = Course
-        fields = ['title', 'description', 'teacher', 'pdf_file', 'video_url']
+        fields = ['title', 'description', 'teacher']
 
 class ModuleForm(forms.ModelForm):
     class Meta:
@@ -30,7 +30,7 @@ class ModuleForm(forms.ModelForm):
 class LessonForm(forms.ModelForm):
     class Meta:
         model = Lesson
-        fields = ['title', 'content', 'video_url', 'pdf_file']
+        fields = ['title', 'content', 'video_url', 'pdf_file', 'module']
 
 class AssignmentForm(forms.ModelForm):
     class Meta:

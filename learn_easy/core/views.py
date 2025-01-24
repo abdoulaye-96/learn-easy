@@ -456,7 +456,7 @@ def notification_update(request, pk):
         form = NotificationForm(instance=notification)
     return render(request, 'core/notification_form.html', {'form': form, 'action': 'Mettre à jour'})
 
-# Suppression d'une notification
+# Suppression d'une notificationaaaa
 @login_required
 @user_passes_test(is_admin)
 def notification_delete(request, pk):

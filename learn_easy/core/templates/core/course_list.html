@@ -1,3 +1,18 @@
+{% extends "core/base.html" %}
+{% block content %}
+<h1>Liste des Cours</h1>
+{% comment %} <a href="{% url 'course_create' %}">Créer un nouveau cours</a> {% endcomment %}
+<ul>
+    {% for course in courses %}
+    <li>
+        <a href="{% url 'course_detail' course.pk %}">{{ course.title }}</a> |
+        <a href="{% url 'course_update' course.pk %}">Modifier</a> |
+        <a href="{% url 'course_delete' course.pk %}">Supprimer</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %} 
+
 
 {% comment %} {% extends "core/base.html" %}
 {% block content %}
@@ -15,17 +30,4 @@
 </ul>
 {% endblock %} {% endcomment %}
 
-{% comment %} {% extends "core/base.html" %}
-{% block content %}
-<h1>Liste des Cours</h1>
-<a href="{% url 'course_create' %}">Créer un nouveau cours</a>
-<ul>
-    {% for course in courses %}
-    <li>
-        <a href="{% url 'course_detail' course.pk %}">{{ course.title }}</a> |
-        <a href="{% url 'course_update' course.pk %}">Modifier</a> |
-        <a href="{% url 'course_delete' course.pk %}">Supprimer</a>
-    </li>
-    {% endfor %}
-</ul>
-{% endblock %} {% endcomment %}
+
