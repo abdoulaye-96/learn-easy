@@ -16,30 +16,42 @@ urlpatterns = [
     # Courses
     path('courses/', views.course_list, name='course_list'),
     path('courses/create/', views.create_course, name='course_create'),  # Assurez-vous que cette ligne existe
-    path('courses/<int:pk>/', views.course_detail, name='course_detail'),
-    path('courses/update/<int:pk>/', views.course_update, name='course_update'),
-    path('courses/delete/<int:pk>/', views.course_delete, name='course_delete'),
+    path('courses/<int:course_id>/', views.course_detail, name='course_detail'),
+    path('courses/update/<int:course_id>/', views.course_update, name='course_update'),
+    path('courses/delete/<int:course_id>/', views.course_delete, name='course_delete'),
+    path('courses/<int:course_id>/enroll/', views.enroll_in_course, name='enroll_in_course'),
+    path('courses/<int:course_id>/enroll/', views.enroll_course, name='enroll_course'),
 
     # Modules
     path('courses/<int:course_id>/modules/', views.module_list, name='module_list'),
-    path('modules/<int:pk>/', views.module_detail, name='module_detail'),
+    path('modules/<int:module_id>/', views.module_detail, name='module_detail'),
     path('create-module/', views.create_module, name='create_module'),
-    path('modules/<int:pk>/update/', views.module_update, name='module_update'),
-    path('modules/<int:pk>/delete/', views.module_delete, name='module_delete'),
+    path('modules/<int:module_id>/update/', views.module_update, name='module_update'),
+    path('modules/<int:module_id>/delete/', views.module_delete, name='module_delete'),
+    path('courses/<int:course_id>/modules/', views.module_list, name='module_list'),
+    path('courses/<int:course_id>/modules/create/', views.create_module, name='create_module'),
 
     # Lessons
     path('modules/<int:module_id>/lessons/', views.lesson_list, name='lesson_list'),
-    path('lessons/<int:pk>/', views.lesson_detail, name='lesson_detail'),
+    path('lessons/<int:lesson_id>/', views.lesson_detail, name='lesson_detail'),
     path('create-lesson/<int:module_id>/', views.create_lesson, name='create_lesson'),
-    path('lessons/<int:pk>/update/', views.lesson_update, name='lesson_update'),
-    path('lessons/<int:pk>/delete/', views.lesson_delete, name='lesson_delete'),
+    path('lessons/<int:module_id>/update/', views.lesson_update, name='lesson_update'),
+    path('lessons/<int:module_id>/delete/', views.lesson_delete, name='lesson_delete'),
+    path('modules/<int:module_id>/', views.module_detail, name='module_detail'),
+    path('lessons/<int:lesson_id>/update/', views.lesson_update, name='lesson_update'),
+    path('courses/<int:course_id>/', views.course_detail, name='course_detail'),
+    path('create-lesson/<int:module_id>/', views.create_lesson, name='create_lesson'),
+
+
+
 
     # Assignments
     path('modules/<int:module_id>/assignments/', views.assignment_list, name='assignment_list'),
-    path('assignments/<int:pk>/', views.assignment_detail, name='assignment_detail'),
-    path('create-assignment/<int:module_id>/', views.create_assignment, name='create_assignment'),
-    path('assignments/<int:pk>/update/', views.assignment_update, name='assignment_update'),
-    path('assignments/<int:pk>/delete/', views.assignment_delete, name='assignment_delete'),
+    path('assignments/<int:assignment_id>/', views.assignment_detail, name='assignment_detail'),
+    path('create-assignment/<int:module_id>/<int:course_id>/', views.create_assignment, name='create_assignment'),
+    path('assignment/<int:assignment_id>/update/', views.assignment_update, name='assignment_update'),
+    path('assignment/<int:assignment_id>/delete/', views.assignment_delete, name='assignment_delete'),
+    # path('module/<int:module_id>/assignment_id/', views.create_assignment, name='create_assignment'),
 
     # Submissions
     path('assignments/<int:assignment_id>/submissions/', views.submission_list, name='submission_list'),

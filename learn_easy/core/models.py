@@ -38,9 +38,16 @@ class Course(models.Model):
         related_name='teacher_courses',
         default=1
     )
-    pdf_file = models.FileField(upload_to='courses/pdfs/', blank=True, null=True, help_text="Téléchargez un fichier PDF pour le cours.")
-    video_url = models.URLField(blank=True, null=True, help_text="Ajoutez un lien vers une vidéo (par exemple, YouTube).")
+    # pdf_file = models.FileField(upload_to='courses/pdfs/', blank=True, null=True, help_text="Téléchargez un fichier PDF pour le cours.")
+    # video_url = models.URLField(blank=True, null=True, help_text="Ajoutez un lien vers une vidéo (par exemple, YouTube).")
     created_at = models.DateTimeField(auto_now_add=True)
+    students = models.ManyToManyField(
+        CustomUser,
+        related_name='enrolled_courses',
+        limit_choices_to={'user_type': 'student'},  # Filtrer pour inclure uniquement les étudiants
+        blank=True
+    )
+
 
     def __str__(self):
         return self.title

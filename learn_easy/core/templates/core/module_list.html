@@ -8,6 +8,6 @@
     {% endfor %}
   </ul>
   {% if user.user_type == 'professor' %}
-    <a href="{% url 'module_create' course.pk %}">Create New Module</a>
+    <a href="{% url 'create_module' course_id=course.id %}">Create New Module</a>
   {% endif %}
 {% endblock %}

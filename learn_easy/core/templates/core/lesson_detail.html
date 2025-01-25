@@ -10,7 +10,6 @@
     <p>PDF File: <a href="{{ lesson.pdf_file.url }}">{{ lesson.pdf_file.name }}</a></p>
   {% endif %}
   {% if user.user_type == 'professor' %}
-    <a href="{% url 'lesson_update' lesson.pk %}">Update Lesson</a>
-    <a href="{% url 'lesson_delete' lesson.pk %}">Delete Lesson</a>
+    
   {% endif %}
 {% endblock %}

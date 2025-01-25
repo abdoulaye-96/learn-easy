@@ -35,7 +35,10 @@ class LessonForm(forms.ModelForm):
 class AssignmentForm(forms.ModelForm):
     class Meta:
         model = Assignment
-        fields = ['title', 'description', 'due_date']
+        fields = ['title', 'description', 'due_date', 'module']
+        widgets = {
+            'due_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        }
 
 class SubmissionForm(forms.ModelForm):
     class Meta:

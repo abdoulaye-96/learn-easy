@@ -10,5 +10,7 @@
       <li><a href="{% url 'lesson_detail' lesson.pk %}">{{ lesson.title }}</a></li>
     {% endfor %}
   </ul>
-  <a href="{% url 'lesson_create' module.pk %}">Ajouter une nouvelle leçon</a>
+  <a href="{% url 'create_lesson' course.id %}">Ajouter une nouvelle leçon</a>
+  
+
 {% endblock %}

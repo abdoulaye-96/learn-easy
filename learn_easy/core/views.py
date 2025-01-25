@@ -5,10 +5,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from .models import CustomUser, Course, Enrollment, Module, Lesson, Discussion, Notification
+from .models import CustomUser, Course, Enrollment, Module, Lesson, Discussion, Notification, Assignment
 from .forms import CustomUserCreationForm
-from .forms import CourseForm, ModuleForm, LessonForm, CourseForm, DiscussionForm
+from .forms import CourseForm, ModuleForm, LessonForm, CourseForm, DiscussionForm, AssignmentForm
 from django.http import HttpResponseForbidden
+from django.contrib import messages
 
 @login_required
 def dashboard_view(request):
@@ -110,9 +111,25 @@ def course_list(request):
 
 #Détails d'un cours (visible par tout le monde connecté)
 @login_required
-def course_detail(request, pk):
-    course = get_object_or_404(Course, pk=pk)
-    return render(request, 'core/course_detail.html', {'course': course})
+# def course_detail(request, pk):
+#     course = get_object_or_404(Course, pk=pk)
+#     return render(request, 'core/course_detail.html', {'course': course})
+
+# def course_detail(request, course_id):
+#     course = get_object_or_404(Course, id=course_id)
+#     modules = course.modules.all()  # Assurez-vous que le modèle Course a une relation avec Module
+#     return render(request, 'core/course_detail.html', {
+#         'course': course,
+#         'modules': modules
+#     })
+def course_detail(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    modules = course.modules.all()  # Assurez-vous que le modèle Course a une relation avec Module
+    return render(request, 'core/course_detail.html', {
+        'course': course,
+        'modules': modules
+    })
+
 
 #Création d'un cours (réservée aux professeurs)
 @login_required
@@ -134,7 +151,7 @@ def create_course(request):
                     title=title,
                     course=course,
                 )
-            return redirect('course_detail', course.id)
+            return redirect('create_module', course_id=course.id)
     else:
         form = CourseForm()
     return render(request, 'core/course_form.html', {'form': form,'action': 'create'})
@@ -191,30 +208,43 @@ def module_list(request, course_id):
 
 # Details d'un module
 @login_required
-def module_detail(request, pk):
-    module = get_object_or_404(Module, pk=pk)
-    return render(request, 'core/module_detail.html', {'module': module})
+# def module_detail(request, pk):
+#     module = get_object_or_404(Module, pk=pk)
+#     return render(request, 'core/module_detail.html', {'module': module})
+def module_detail(request, module_id):
+    module = get_object_or_404(Module, id=module_id)
+    lessons = module.lessons.all()  # Assurez-vous que le modèle Module a une relation avec Lesson
+    assignments = module.assignments.all()
+    return render(request, 'core/module_detail.html', {
+        'module': module,
+        'lessons': lessons,
+        'assignments': assignments
+    })
 
 # Création d'un module
 @login_required
-def create_module(request):
+def create_module(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
     if request.user.user_type != 'professor':
         return HttpResponseForbidden("Vous n'avez pas l'autorisation de créer un module.")
     
     if request.method == 'POST':
         form = ModuleForm(request.POST)
         if form.is_valid():
-            module = form.save()
-            return redirect('core/module_detail', module.id)
+            module = form.save(commit=False)
+            module.course = course
+            module.save()
+            return redirect('create_lesson', module_id=module.id)
     else:
         form = ModuleForm()
-    return render(request, 'core/create_module.html', {'form': form})
+    return render(request, 'core/module_form.html', {'form': form, 'action': 'create'})
+
 
 # Mise à jour d'un module
 @login_required
 @user_passes_test(is_professor)
-def module_update(request, pk):
-    module = get_object_or_404(Module, pk=pk)
+def module_update(request, module_id):
+    module = get_object_or_404(Module, id=module_id)
     if request.method == 'POST':
         form = ModuleForm(request.POST, instance=module)
         if form.is_valid():
@@ -227,8 +257,8 @@ def module_update(request, pk):
 # Suppression d'un module
 @login_required
 @user_passes_test(is_professor)
-def module_delete(request, pk):
-    module = get_object_or_404(Module, pk=pk)
+def module_delete(request, module_id):
+    module = get_object_or_404(Module, id=module_id)
     if request.method == 'POST':
         module.delete()
         return redirect('module_list', course_id=module.course.id)
@@ -237,53 +267,60 @@ def module_delete(request, pk):
 # Liste des leçons
 @login_required
 def lesson_list(request, module_id):
-    module = get_object_or_404(Module, pk=module_id)
+    module = get_object_or_404(Module, id=module_id)
     lessons = Lesson.objects.filter(module=module)
     return render(request, 'core/lesson_list.html', {'module': module, 'lessons': lessons})
 
 # Details d'une lesson
 @login_required
-def lesson_detail(request, pk):
-    lesson = get_object_or_404(Lesson, pk=pk)
+# def lesson_detail(request, pk):
+#     lesson = get_object_or_404(Lesson, pk=pk)
+#     return render(request, 'core/lesson_detail.html', {'lesson': lesson})
+def lesson_detail(request, lesson_id):
+    # lesson = get_object_or_404(Lesson, id=lesson_id)
+    lesson = get_object_or_404(Lesson, id=lesson_id)
     return render(request, 'core/lesson_detail.html', {'lesson': lesson})
+
 
 # Création d'une lesson
 @login_required
 def create_lesson(request, module_id):
+    module = get_object_or_404(Module, id=module_id)
+    # course = get_object_or_404(Course, id=course_id)
     if request.user.user_type != 'professor':
         return HttpResponseForbidden("Vous n'avez pas l'autorisation de créer une leçon.")
     
-    module = get_object_or_404(Module, id=module_id)
     if request.method == 'POST':
         form = LessonForm(request.POST, request.FILES)
         if form.is_valid():
             lesson = form.save(commit=False)
             lesson.module = module
             lesson.save()
-            return redirect('lesson_detail', lesson.id)
+            return redirect('create_assignment', module_id=module.id)  # Utiliser course_id ici
     else:
         form = LessonForm()
-    return render(request, 'create_lesson.html', {'form': form, 'module': module})
+    return render(request, 'core/assignment_form.html', {'form': form, 'module': module, 'action': 'create'})
+
 
 
 # Mise a jour d'une leçon
 @login_required
 @user_passes_test(is_professor)
-def lesson_update(request, pk):
-    lesson = get_object_or_404(Lesson, pk=pk)
+def lesson_update(request, module_id):
+    lesson = get_object_or_404(Lesson, id=module_id)
     if request.method == 'POST':
         form = LessonForm(request.POST, request.FILES, instance=lesson)
         if form.is_valid():
             form.save()
-            return redirect('lesson_detail', pk=lesson.pk)
+            return redirect('lesson_detail', id=lesson.id)
     else:
         form = LessonForm(instance=lesson)
     return render(request, 'core/lesson_form.html', {'form': form, 'action': 'Mettre à jour'})
 
 @login_required
 @user_passes_test(is_professor)
-def lesson_delete(request, pk):
-    lesson = get_object_or_404(Lesson, pk=pk)
+def lesson_delete(request, module_id):
+    lesson = get_object_or_404(Lesson, id=module_id)
     if request.method == 'POST':
         lesson.delete()
         return redirect('lesson_list', module_id=lesson.module.id)
@@ -292,45 +329,46 @@ def lesson_delete(request, pk):
 # Listes des devoir
 @login_required
 def assignment_list(request, module_id):
-    module = get_object_or_404(Module, pk=module_id)
+    module = get_object_or_404(Module, id=module_id)
     assignments = Assignment.objects.filter(module=module)
     return render(request, 'core/assignment_list.html', {'module': module, 'assignments': assignments})
 
 # Details d'un devoir
 @login_required
-def assignment_detail(request, pk):
-    assignment = get_object_or_404(Assignment, pk=pk)
+def assignment_detail(request, assignment_id):
+    assignment = get_object_or_404(Assignment, id=assignment_id)
     return render(request, 'core/assignment_detail.html', {'assignment': assignment})
 
 # Création d'un devoir
 @login_required
-def create_assignment(request, module_id):
+def create_assignment(request, module_id, course_id):
     if request.user.user_type != 'professor':
         return HttpResponseForbidden("Vous n'avez pas l'autorisation de créer un devoir.")
     
     module = get_object_or_404(Module, id=module_id)
+    course = get_object_or_404(course, id=course_id)
     if request.method == 'POST':
         form = AssignmentForm(request.POST)
         if form.is_valid():
             assignment = form.save(commit=False)
             assignment.module = module
             assignment.save()
-            return redirect('core/assignment_detail', assignment.id)
+            return redirect('course_detail', module_id=module.id, course_id=course.id)
     else:
         form = AssignmentForm()
-    return render(request, 'core/create_assignment.html', {'form': form, 'module': module})
+    return render(request, 'core/assignment_form.html', {'form': form, 'module': module, 'action': 'create'})
 
 
 # Mise a jour d'un devoir
 @login_required
 @user_passes_test(is_professor)
-def assignment_update(request, pk):
-    assignment = get_object_or_404(Assignment, pk=pk)
+def assignment_update(request, assignment_id):
+    assignment = get_object_or_404(Assignment, id=assignment_id)
     if request.method == 'POST':
         form = AssignmentForm(request.POST, instance=assignment)
         if form.is_valid():
             form.save()
-            return redirect('assignment_detail', pk=assignment.pk)
+            return redirect('assignment_detail', module_id=assignment.module.id)
     else:
         form = AssignmentForm(instance=assignment)
     return render(request, 'core/assignment_form.html', {'form': form, 'action': 'Mettre à jour'})
@@ -338,8 +376,10 @@ def assignment_update(request, pk):
 # Suppression d'un devoir
 @login_required
 @user_passes_test(is_professor)
-def assignment_delete(request, pk):
-    assignment = get_object_or_404(Assignment, pk=pk)
+def assignment_delete(request, assignment_id):
+    assignment = get_object_or_404(Assignment, id=assignment_id)
+    module_id = assignment.module.id
+    assignment.delete()
     if request.method == 'POST':
         assignment.delete()
         return redirect('assignment_list', module_id=assignment.module.id)
@@ -348,7 +388,7 @@ def assignment_delete(request, pk):
 # Listes des soumissions
 @login_required
 def submission_list(request, assignment_id):
-    assignment = get_object_or_404(Assignment, pk=assignment_id)
+    assignment = get_object_or_404(Assignment, id=assignment_id)
     submissions = Submission.objects.filter(assignment=assignment)
     return render(request, 'core/submission_list.html', {'assignment': assignment, 'submissions': submissions})
 
@@ -502,3 +542,26 @@ def notification_delete(request, pk):
         notification.delete()
         return redirect('notification_list')
     return render(request, 'core/notification_confirm_delete.html', {'notification': notification})
+
+@login_required
+def enroll_in_course(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    if request.user not in course.students.all():
+        course.students.add(request.user)  # Ajoute l'utilisateur connecté au cours
+    return redirect('course_detail', course_id=course_id)
+
+@login_required
+def enroll_course(request, course_id):
+    course = get_object_or_404(Course, pk=course_id)
+    user = request.user
+    if course.students.filter(id=user.id).exists():
+        messages.info(request, "Vous êtes déjà inscrit à ce cours.")
+    else:
+        course.students.add(user)
+        messages.success(request, "Inscription réussie au cours !")
+    return redirect('course_detail', course_id=course_id)
+
+@login_required
+def my_courses(request):
+    courses = request.user.enrolled_courses.all()  # Récupère les cours de l'utilisateur connecté
+    return render(request, 'courses/my_courses.html', {'courses': courses})

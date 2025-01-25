@@ -49,7 +49,14 @@
         {% if course.video_url %}
           <p class="mt-2 text-gray-700">Video URL: <a href="{{ course.video_url }}" class="text-purple-800">{{ course.video_url }}</a></p>
         {% endif %}
-      </section>
+      
+        <!-- Bouton S'inscrire au cours -->
+        <form method="POST" action="{% url 'enroll_course' course.pk %}">
+          {% csrf_token %}
+          <button type="submit" class="mt-4 bg-purple-800 text-white py-2 px-4 rounded hover:bg-purple-700">
+            S'inscrire au cours
+          </button>
+        </form>
 
       <!-- Modules -->
       <section>
