@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from .models import CustomUser, Course, Enrollment, Module, Lesson, Discussion, Notification, Assignment
 from .forms import CustomUserCreationForm
-from .forms import CourseForm, ModuleForm, LessonForm, CourseForm, DiscussionForm, AssignmentForm
+from .forms import CourseForm, ModuleForm, LessonForm, CourseForm, DiscussionForm, AssignmentForm, NotificationForm
 from django.http import HttpResponseForbidden
 from django.contrib import messages
 
@@ -506,7 +506,7 @@ def notification_detail(request, pk):
 
 # Création d'une notification
 @login_required
-@user_passes_test(is_admin)
+# @user_passes_test(is_admin)
 def notification_create(request):
     if request.method == 'POST':
         form = NotificationForm(request.POST)

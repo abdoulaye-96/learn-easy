@@ -18,43 +18,26 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 12l9-5-9-5-9 5 9 5z" />
           </svg>
         </div>
-        <span class="text-xl font-bold text-gray-800">Learn-Easy</span>
+        <a href="{% url 'dashboard' %}" class="text-2xl font-bold text-gray-800">Learn-Easy</a>
       </div>
       <!-- Menu -->
       <nav class="space-x-6 text-gray-700">
         <!-- <a href="{% url 'dashboard' %}" class="hover:text-blue-500">Accueil</a> -->
         {% if user.is_authenticated %}
-          <a href="{% url 'logout' %}" class="hover:text-blue-500">Se déconnecter</a>
+          <a href="#" class="text-purple-700 hover:text-blue-500 text-2xl font-bold">{{ user.username }}</a>
+          <a href="{% url 'logout' %}" class="text-purple-700 hover:text-blue-500 text-2xl font-bold">Se déconnecter</a>
         {% else %}
-          <a href="{% url 'login' %}" class="hover:text-blue-500">Se connecter</a>
-          <a href="{% url 'register' %}" class="hover:text-blue-500">S'inscrire</a>
+          <a href="{% url 'login' %}" class="text-purple-700 hover:text-blue-500 text-2xl font-bold">Se connecter</a>
+          <a href="{% url 'register' %}" class="text-purple-700 hover:text-blue-500 text-2xl font-bold">S'inscrire</a>
         {% endif %}
       </nav>
     </div>
   </header>
 
-  <!-- Hero Section -->
-  <section class="relative bg-cover bg-center" style="background-image: url('https://atlasexpertgroupe.com/wp-content/uploads/2023/09/service-3-scaled.jpg');">
-    <div class="bg-black bg-opacity-70 py-60">
-      <div class="container mx-auto text-center text-white">
-        <h1 class="text-4xl md:text-5xl font-bold leading-snug mb-4">
-          Bienvenue sur Learn-Easy<br>
-          Gérez vos activités facilement et efficacement.
-        </h1>
-        <p class="text-lg md:text-xl mb-6">
-          Une solution moderne pour simplifier votre quotidien. Découvrez<br>
-          nos fonctionnalités avancées et notre interface intuitive.
-        </p>
-        <a href="{% url 'login' %}" class="bg-blue-600 text-white px-8 py-3 rounded-full text-lg shadow-md hover:bg-blue-500 transition">
-          Commencez Maintenant ➡
-        </a>
-      </div>
-    </div>
-  </section>
-
+  
   <!-- Main Content -->
-  <main class="container mx-auto mt-10">
     {% block content %}
+
     {% endblock %}
   </main>
 

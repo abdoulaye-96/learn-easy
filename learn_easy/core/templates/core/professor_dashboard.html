@@ -1,4 +1,190 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learn-Easy</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js" type="module"></script>
+  <script src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js" nomodule></script>
+</head>
+<body class="bg-gray-50 font-sans">
+  <!-- Container principal -->
+  <div class="flex h-screen">
+    <!-- Sidebar gauche -->
+    <aside class="w-1/4 bg-gray-100 p-6">
+      <h1 class="text-2xl font-bold text-purple-800">Learn-Easy</h1>
+      <p class="text-gray-700 mt-2">{{ user.first_name }} {{ user.last_name }}</p>
 
+      <!-- Réseaux sociaux -->
+      <div class="flex gap-4 mt-4">
+        <a href="#" class="bg-purple-800 text-white p-2 rounded-full">
+          <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <a href="#" class="bg-purple-800 text-white p-2 rounded-full">
+          <ion-icon name="logo-instagram"></ion-icon>
+        </a>
+        <a href="#" class="bg-purple-800 text-white p-2 rounded-full">
+          <ion-icon name="logo-linkedin"></ion-icon>
+        </a>
+      </div>
+
+      <!-- Menu de navigation -->
+      <nav class="mt-8">
+        <ul>
+          <li class="mb-4">
+            <a href='#' class="block hover:bg-purple-800 hover:text-white py-2 px-4 rounded-lg">Tableau de board</a>
+          </li>
+          <li class="mb-4">
+            <a href={% url 'course_list'%} class="block hover:bg-purple-800 hover:text-white py-2 px-4 rounded-lg">Mes cours</a>
+          </li>
+          <li class="mb-4">
+            <a href="dash-etud-parcour.html" class="block hover:bg-purple-800 hover:text-white py-2 px-4 rounded-lg">Mes parcours </a>
+          </li>
+          <li class="mb-4">
+            <a href={% url "logout"%} class="block hover:bg-purple-800 hover:text-white py-2 px-4 rounded-lg">Se deconnexion</a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Contenu principal -->
+    <main class="flex-1 p-8">
+      <!-- Barre de navigation -->
+      <div class="flex justify-between bg-gray-200 items-center mb-8 p-4 rounded-lg">
+        <nav class="flex gap-4 text-gray-700">
+          <a href="{% url 'dashboard' %}" class="font-bold">Accueil</a>
+          <a href="{% url 'dashboard' %}" class="text-gray-700 hover:text-purple-800">Tableau de bord</a>
+          <a href="#" class="text-purple-800 font-bold">Mes cours</a>
+        </nav>
+      </div>
+
+      <!-- Contenu des inscriptions -->
+      <h1 class="text-2xl font-bold text-gray-800 mb-6">Tableau de bord des professeurs</h1>
+      <ul class="space-y-4">
+        {% for enrollment in enrollments %}
+        <li class="bg-white p-6 shadow-md rounded-lg border border-gray-200">
+          <h2 class="text-xl font-bold text-purple-800">{{ enrollment.course.title }}</h2>
+          <div class="mt-4 space-y-2">
+            <a href={% url 'course_detail' enrollment.course.pk %} class="text-purple-600 hover:underline">Voir les détails du cours</a><br>
+            <a href={% url 'module_list' enrollment.course.pk %} class="text-purple-600 hover:underline">Voir les modules</a><br>
+            <a href={% url 'discussion_list' enrollment.course.pk %} class="text-purple-600 hover:underline">Voir les discussions</a><br>
+            {% for module in enrollment.course.modules.all %}
+            <div class="ml-4">
+              <a href={% url 'assignment_list' module.pk %} class="text-gray-600 hover:text-purple-600">Voir les devoirs pour {{ module.title }}</a><br>
+              <a href={% url 'submission_list' module.pk %} class="text-gray-600 hover:text-purple-600">Voir les soumissions pour {{ module.title }}</a>
+            </div>
+            {% endfor %}
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+
+      <!-- Liens supplémentaires -->
+      <div class="mt-8">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6 text-purple-600 hover:underline">Vos cours</h1>
+        <ul>
+            {% for course in courses %}
+            <li>
+                <strong>{{ course.title }}</strong> - {{ course.description }}
+                <br>
+                <a href="{% url 'course_detail' course.pk %}" class="text-purple-600 hover:underline">Voir les détails du cours {{ course.title }}</a>
+                <br>
+                <a href="{% url 'module_list' course.pk %}" class="text-purple-600 hover:underline">Voir les modules pour {{ course.title }}</a>
+                <br>
+                <a href="{% url 'discussion_list' course.pk %}" class="text-purple-600 hover:underline">Voir les discussions sur {{ course.title }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+        <div class="mt-8 border-b-2 border-gray-300">
+        <a href="{% url 'course_list' %}" class="text-purple-600 hover:underline">Liste des cours</a>
+        <br>
+        <a href="{% url 'course_create' %}" class="text-purple-600 hover:underline">Créer un nouveau cours</a>
+        <br>
+        <a href="{% url 'notification_list' %}" class="text-purple-600 hover:underline">Voir les notifications</a>
+    </div>  
+    </div>
+    </main>
+  </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% comment %} 
 {% extends "core/base.html" %}
 {% block title %}Professor Dashboard{% endblock %}
 {% block content %}
@@ -22,4 +208,4 @@
 <br>
 <a href="{% url 'notification_list' %}">Voir les notifications</a>
 {% endblock %}
-
+ {% endcomment %}

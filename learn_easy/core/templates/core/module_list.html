@@ -1,13 +1,16 @@
 {% extends "core/base.html" %}
 
 {% block content %}
-  <h1>Modules for {{ course.title }}</h1>
+  <h1 class="text-2xl font-bold text-center mb-6 text-purple-700 hover:text-blue-500 mt-10">Modules pour le cours {{ course.title }}</h1>
   <ul>
     {% for module in modules %}
-      <li><a href="{% url 'module_detail' module.pk %}">{{ module.title }}</a></li>
+      <li class="flex justify-center"><a href="{% url 'module_detail' module.pk %}" class="text-2xl font-bold items-center mb-6 text-purple-700 hover:text-blue-500"> Module {{ module.title }}</a></li>
     {% endfor %}
   </ul>
   {% if user.user_type == 'professor' %}
-    <a href="{% url 'create_module' course_id=course.id %}">Create New Module</a>
+    <a href="{% url 'create_module' course_id=course.id %}" class="text-2xl font-bold text-center flex justify-center mb-6 text-purple-700 hover:text-blue-500">creer un nouveau Module</a>
   {% endif %}
 {% endblock %}
+
+
+{% comment %} <div class="min-h-screen flex items-center justify-center bg-gray-100 h-100"> {% endcomment %}

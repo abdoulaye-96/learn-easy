@@ -34,16 +34,16 @@
       <nav class="mt-8">
         <ul>
           <li class="mb-4">
-            <a href="dash-etudiant.html" class="block hover:bg-purple-800 hover:text-white py-2 px-4 rounded-lg">Tableau de board</a>
+            <a href="#" class="block hover:bg-purple-800 hover:text-white py-2 px-4 rounded-lg">Tableau de board</a>
           </li>
           <li class="mb-4">
-            <a href="dash-etud-cours.html" class="block hover:bg-purple-800 hover:text-white py-2 px-4 rounded-lg">Mes cours</a>
+            <a href={% url 'course_list'%} class="block hover:bg-purple-800 hover:text-white py-2 px-4 rounded-lg">Mes cours</a>
           </li>
           <li class="mb-4">
             <a href="dash-etud-parcour.html" class="block hover:bg-purple-800 hover:text-white py-2 px-4 rounded-lg">Mes parcours</a>
           </li>
           <li class="mb-4">
-            <a href="dash-etud-compt.html" class="block hover:bg-purple-800 hover:text-white py-2 px-4 rounded-lg">Mon compte</a>
+            <a href={% url "logout" %} class="block hover:bg-purple-800 hover:text-white py-2 px-4 rounded-lg">Se deconnecter</a>
           </li>
         </ul>
       </nav>

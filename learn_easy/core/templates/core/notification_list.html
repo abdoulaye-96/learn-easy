@@ -1,13 +1,13 @@
 {% extends "core/base.html" %}
 
 {% block content %}
-  <h1>Notifications</h1>
+  <h1 class="text-2xl font-bold text-center mb-6 text-purple-700 hover:text-blue-500 mt-10">Notifications</h1>
   <ul>
     {% for notification in notifications %}
-      <li><a href="{% url 'notification_detail' notification.pk %}">{{ notification.message }}</a></li>
+      <li><a href="{% url 'notification_detail' notification.pk %}" class="flex justify-center">{{ notification.message }}</a></li>
     {% endfor %}
   </ul>
-  {% if user.user_type == 'admin' %}
-    <a href="{% url 'notification_create' %}">Create New Notification</a>
-  {% endif %}
+  {% comment %} {% if user.user_type == 'admin' %} {% endcomment %}
+    <a href="{% url 'notification_create' %}" class="text-2xl font-bold text-center flex justify-center mb-6 text-purple-700 hover:text-blue-500">créer une nouvelle notification</a>
+  {% comment %} {% endif %} {% endcomment %}
 {% endblock %}

@@ -33,16 +33,16 @@
       <nav class="mt-8">
         <ul>
           <li class="mb-4">
-            <a href="dash-etudiant.html" class="block hover:bg-purple-800 hover:text-white py-2 px-4 rounded-lg">Tableau de bord</a>
+            <a href="#" class="block hover:bg-purple-800 hover:text-white py-2 px-4 rounded-lg">Tableau de bord</a>
           </li>
           <li class="mb-4">
-            <a href="dash-etud-cours.html" class="block hover:bg-purple-800 hover:text-white py-2 px-4 rounded-lg">Mes cours</a>
+            <a href={% url "course_list" %} class="block hover:bg-purple-800 hover:text-white py-2 px-4 rounded-lg">Mes cours</a>
           </li>
           <li class="mb-4">
-            <a href="dash-etud-parcour.html" class="block hover:bg-purple-800 hover:text-white py-2 px-4 rounded-lg">Mes parcours</a>
+            <a href={% url "course_list" %} class="block hover:bg-purple-800 hover:text-white py-2 px-4 rounded-lg">Mes parcours</a>
           </li>
           <li class="mb-4">
-            <a href="dash-etud-compt.html" class="block hover:bg-purple-800 hover:text-white py-2 px-4 rounded-lg">Mon compte</a>
+            <a href={% url "logout" %} class="block hover:bg-purple-800 hover:text-white py-2 px-4 rounded-lg">Se deconnecter</a>
           </li>
         </ul>
       </nav>
@@ -60,7 +60,7 @@
       </div>
 
       <!-- Contenu des inscriptions -->
-      <h1 class="text-2xl font-bold text-gray-800 mb-6">Vos inscriptions</h1>
+      <h1 class="text-2xl font-bold text-gray-800 mb-6">Tableau de bord des professeurs</h1>
       <ul class="space-y-4">
         {% for enrollment in enrollments %}
         <li class="bg-white p-6 shadow-md rounded-lg border border-gray-200">

@@ -1,11 +1,24 @@
 {% extends "core/base.html" %}
 {% block title %}Admin Dashboard{% endblock %}
 {% block content %}
-<h1>Tableau de bord administrateur</h1>
-<ul>
-    {% for user in users %}
-    <li>{{ user.username }} - {{ user.get_user_type_display }}</li>
-    {% endfor %}
-</ul>
-<a href="{% url 'course_list' %}">liste des cours</a>
-{% endblock %}
+<div class="min-h-screen bg-gray-100 p-6">
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">Tableau de bord administrateur</h1>
+        
+        <ul class="space-y-4">
+            {% for user in users %}
+            <li class="flex justify-between items-center p-4 bg-gray-50 rounded-md shadow-sm">
+                <span class="text-lg text-gray-700">{{ user.username }}</span>
+                <span class="text-sm text-gray-500">{{ user.get_user_type_display }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+
+        <div class="mt-6">
+            <a href="{% url 'course_list' %}" class="inline-block bg-purple-700 hover:bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-200">
+                Liste des cours
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,5 +1,22 @@
 {% extends "core/base.html" %}
-{% block title %}Dashboard{% endblock %}
+{% comment %} {% block title %}Dashboard{% endblock %} {% endcomment %}
 {% block content %}
-<h1>Bienvenue, {{ user.username }}!</h1>
+<section class="relative bg-cover bg-center" style="background-image: url('https://atlasexpertgroupe.com/wp-content/uploads/2023/09/service-3-scaled.jpg');">
+    <div class="bg-black bg-opacity-70 py-60">
+      <div class="container mx-auto text-center text-white">
+        <h1 class="text-4xl md:text-5xl font-bold leading-snug mb-4">
+          Bienvenue sur Learn-Easy<br>
+          Gérez vos activités facilement et efficacement.
+        </h1>
+        <p class="text-lg md:text-xl mb-6">
+          Une solution moderne pour simplifier votre quotidien. Découvrez<br>
+          nos fonctionnalités avancées et notre interface intuitive.
+        </p>
+        <a href="{% url 'login' %}" class="bg-blue-600 text-white px-8 py-3 rounded-full text-lg shadow-md hover:bg-blue-500 transition">
+          Commencez Maintenant ➡
+        </a>
+      </div>
+    </div>
+  </section>
 {% endblock %}
+{% comment %} <h1>Bienvenue, {{ user.username }}!</h1> {% endcomment %}

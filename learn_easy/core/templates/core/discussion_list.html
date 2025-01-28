@@ -1,6 +1,32 @@
 {% extends "core/base.html" %}
 
 {% block content %}
+  <h1 class="text-2xl font-bold text-center mb-6 text-purple-700 hover:text-blue-500 mt-10">Discussions sur le cours {{ course.title }}</h1>
+  <ul>
+    {% for module in modules %}
+      <li class="flex justify-center"><a href="{% url 'discussion_detail' discussion.pk %}" class="text-2xl font-bold items-center mb-6 text-purple-700 hover:text-blue-500"> {{ discussion.user.username }}</a></li>
+    {% endfor %}
+  </ul>
+  {% if user.user_type == 'professor' %}
+     <ul>
+      {% for discussion in discussions %}
+        <li class="flex justify-center"><a href="{% url 'discussion_detail' discussion.pk %}" class="text-2xl items-center mb-6 text-black hover:text-blue-500"> {{ discussion.content }}</a></li>
+      {% endfor %}
+    </ul>
+    <a href="{% url 'discussion_create' course.pk %}" class="text-2xl font-bold text-center flex justify-center mb-6 text-purple-700 hover:text-blue-500">creer une nouvelle discussion</a>
+  {% endif %}
+{% endblock %}
+
+
+{% comment %} <div class="min-h-screen flex items-center justify-center bg-gray-100 h-100"> {% endcomment %}
+
+
+
+
+
+{% comment %} {% extends "core/base.html" %}
+
+{% block content %}
   <h1>Discussions for {{ course.title }}</h1>
   <ul>
     {% for discussion in discussions %}
@@ -8,4 +34,4 @@
     {% endfor %}
   </ul>
   <a href="{% url 'discussion_create' course.pk %}">Create New Discussion</a>
-{% endblock %}
+{% endblock %} {% endcomment %}
